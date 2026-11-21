@@ -1,3 +1,18 @@
+// HUSHSTACK: The Night Archive — hand-in program for our stealth game entry.
+//
+// Running this file delivers the finished entry in one pass. It takes the
+// game's own folder, game/ — the plain static files the browser loads to play
+// HUSHSTACK, a top-down night-time stealth game about slipping through a
+// candle-lit archive unseen — together with the screenshots/ folder holding
+// the four captures that show the game in play, and copies both of them,
+// untouched, into the output directory the grader reads. It then writes one
+// further file alongside them, dossier.json: the machine-made summary of the
+// entry (its file listing, sizes and source text) that the judge works from,
+// produced by the vendored make.fun library exactly as the kit prescribes.
+// Nothing here transforms, rebuilds or generates any part of the game itself;
+// the program only carries the entry from this repository to the grader and
+// leaves the dossier as the receipt of what was handed in.
+
 // A working best-game-01 entry (Node 22, standard library only): the game is this directory's
 // game/ folder, plain static files a desktop browser loads offline (game/index.html and its ES
 // modules, no library and no network request), and the program hands it in. It copies game/ and
@@ -39,3 +54,12 @@ writeFileSync(
     game_path_max_bytes: 1000,
   }),
 );
+
+// One-line hand-in summary, printed once the dossier is on disk: walk the output
+// directory, count every file that was delivered — the game tree, the screenshots
+// and dossier.json itself — and report the tally under the entry's name.
+import { readdirSync } from 'node:fs';
+
+const handedInCount = readdirSync(out, { recursive: true, withFileTypes: true })
+  .filter((entry) => entry.isFile()).length;
+console.log(`HUSHSTACK: The Night Archive - handed in ${handedInCount} files (game, screenshots and dossier.json).`);
